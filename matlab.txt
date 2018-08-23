@@ -1,0 +1,49 @@
+//神经网络    分类与预测
+//多输入单输出非线性系统的动态过程
+hardlim.m                        //阈值型
+purelin.m                        //线性型
+logsig.m tansig.m                //S型   通常用于反向传播(BP)神经网络
+//学习的目的是调整连接权值，以使网络对任何输入都能得到所期望的输出
+//给wi(0)(i=1，2，…，n)及阈值θ分别赋予一个较小的非零随机数作为初值；
+//这里wi (0)表示在时刻t=0时第i个输入的连接权值。
+//单层神经网络  多层神经网络
+P=[-0.5 -0.6 0.7;0.8 0 0.1];                                       %已知样本输入向量
+T=[1 1 0];                                                         %已知样本目标向量
+net=newp([-1 1;-1 1],1);                                           %创建感知器
+handle=plotpc(net.iw{1},net.b{1});                                 %返回划分类线的句柄  初始句柄
+net.trainParam.epochs=10;                                          %设置训练最大次数
+net=train(net,P,T);                                                %训练网络
+
+Q=[0.6 0.9 -0.1;-0.1 -0.5 0.5];                                    %已知待分类向量
+Y=sim(net,Q);                                                      %二元分类仿真结果 
+figure;                                                            %新建图形窗口
+plotpv(Q,Y);                                                       %画输入向量
+handle=plotpc(net.iw{1},net.b{1},handle)                           %画分类线
+net = newp( pr, s, tf, lf )
+net:  //函数返回参数,表示生成的感知器网络
+pr:   //一个R×2矩阵, 由R维输入向量的每维最小值和最大值组成
+s:    //神经元的个数
+tf:   //感知器的传递函数, 默认为hardlim, 可选hardlims
+lf:   //感知器的学习函数,默认为learnp, 可选learnpn
+
+%net.inputweights{1,1}.initFcn = ‘rands’;
+%net.biases{1}.initFcn = ‘rands’;                  //改变默认初始化函数为随机函数rands
+%net =init(net);              %重新初始化
+%net.IW{1,1}=[1 2;3 4];          net.b{1}=1        //直接初始化定义权值和阈值
+
+net=newff(PR,[S1 S2...SN],{TF1 TF2... TFN},BTF,BLF,PF)  //net=newff(PR,[S1 S2...SN],{TF1 TF2... TFN},BTF,BLF,PF)
+PR: 一个R×2矩阵, 由R维输入向量的每维最小值和最大值组成
+Si: 第i层的神经元个数
+TFi: 第i层的传递函数, 默认为tansig
+BTF: 训练函数, 默认为trainlm
+BLF: 学习函数, 默认为learngdm
+PF: 性能函数, 默认为mse
+net=newff([0,10;-1,2],[5,1],{‘tansig’,’purelin’},’trainlm’);
+%生成一个两层BP网络,隐层和输出层神经的个数为5和1, 传递函数分别为tansig和purelin, 训练函数为trainlm, 其他默认
+
+
+ 
+
+
+
+ 
