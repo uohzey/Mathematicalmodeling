@@ -41,6 +41,21 @@ PF: 性能函数, 默认为mse
 net=newff([0,10;-1,2],[5,1],{‘tansig’,’purelin’},’trainlm’);
 %生成一个两层BP网络,隐层和输出层神经的个数为5和1, 传递函数分别为tansig和purelin, 训练函数为trainlm, 其他默认
 
+//BP神经网络
+P=xlsread('shuju.xlsx');
+T=xlsread('mubiao.xlsx');
+[Q,ps]=mapminmax(P);
+[R,pt]=mapminmax(T);
+net=newff(minmax(P),[15,1],{'tansig','purelin'},'trainscg');
+net.trainParam.epochs = 200000;
+net.trainParam.goal=0.0000001;
+[net,tr]=train(net,Q,R);
+P2=xlsread('test.xlsx');
+Q2 = mapminmax('apply',P2,ps);
+M=sim(net,Q2);
+M_again = mapminmax('reverse',M,pt);
+xlswrite('answer.xlsx',M_again);
+
 
  
 
